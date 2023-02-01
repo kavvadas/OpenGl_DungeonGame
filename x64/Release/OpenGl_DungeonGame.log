@@ -1,4 +1,38 @@
-﻿  OpenGl_DungeonGame.vcxproj -> C:\Users\dimit\OneDrive\Desktop\OpenGl_DungeonGame\x64\Release\OpenGl_DungeonGame.exe
+﻿  AssetManager.cpp
+  CollidableNode.cpp
+  GeometryNode.cpp
+  Renderer.cpp
+C:\Users\dimit\OneDrive\Desktop\OpenGl_DungeonGame\Source\Renderer.cpp(309,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\dimit\OneDrive\Desktop\OpenGl_DungeonGame\Source\Renderer.cpp(674,25): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\dimit\OneDrive\Desktop\OpenGl_DungeonGame\Source\Renderer.cpp(678,25): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\dimit\OneDrive\Desktop\OpenGl_DungeonGame\Source\Renderer.cpp(683,25): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\dimit\OneDrive\Desktop\OpenGl_DungeonGame\Source\Renderer.cpp(687,25): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+  ShaderProgram.cpp
+  TextureManager.cpp
+C:\Users\dimit\OneDrive\Desktop\OpenGl_DungeonGame\Source\TextureManager.cpp(59,9): warning C4101: 'internal_texture_format': unreferenced local variable
+  main.cpp
+  Generating code
+  0 of 1309 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  OpenGl_DungeonGame.vcxproj -> C:\Users\dimit\OneDrive\Desktop\OpenGl_DungeonGame\x64\Release\OpenGl_DungeonGame.exe
   copy "C:\Users\dimit\OneDrive\Desktop\OpenGl_DungeonGame\3rd party\bin\*.dll" "C:\Users\dimit\OneDrive\Desktop\OpenGl_DungeonGame\x64\Release\"
   C:\Users\dimit\OneDrive\Desktop\OpenGl_DungeonGame\3rd party\bin\glew32.dll
   C:\Users\dimit\OneDrive\Desktop\OpenGl_DungeonGame\3rd party\bin\libjpeg-9.dll

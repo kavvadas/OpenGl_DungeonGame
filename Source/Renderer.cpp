@@ -14,6 +14,7 @@
 Renderer::Renderer()
 {
 	this->m_nodes = {};
+	this->m_collidables_nodes = {};
 	this->m_continous_time = 0.0;
 }
 
@@ -61,29 +62,22 @@ bool Renderer::Init(int SCREEN_WIDTH, int SCREEN_HEIGHT)
 
 void Renderer::BuildWorld()
 {
-	GeometryNode& dragon = *this->m_nodes[0];
+	/*GeometryNode& dragon = *this->m_nodes[0];
 	GeometryNode& pedestral = *this->m_nodes[1];
 	GeometryNode& totem = *this->m_nodes[2];
 	GeometryNode& warrior = *this->m_nodes[3];
+	GeometryNode& narrow_cor = *this->m_nodes[4];*/
+	GeometryNode& simple_room_1 = *this->m_nodes[0];
+	simple_room_1.app_model_matrix= glm::translate(glm::mat4(1.f), glm::vec3(1.f, 0.f, 0.f))*glm::rotate(glm::mat4(1.f),glm::radians(180.f), glm::vec3(0, 1.f, 0.f));
 
-	dragon.model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(-1.5f, 0.f, 0.f));
-	dragon.m_aabb.center = glm::vec3(dragon.model_matrix * glm::vec4(dragon.m_aabb.center, 1.f));
 
-	pedestral.model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(1.5f, 0.f, 0.f));
-	pedestral.m_aabb.center = glm::vec3(pedestral.model_matrix * glm::vec4(pedestral.m_aabb.center, 1.f));
 
-	warrior.model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(3.f, 0.f, 0.f));
-	warrior.m_aabb.center = glm::vec3(warrior.model_matrix * glm::vec4(warrior.m_aabb.center, 1.f));
-
-	totem.model_matrix = glm::mat4(1.0f);
-
-	this->m_world_matrix = glm::mat4(1.f);
 }
 
 void Renderer::InitCamera()
 {
-	this->m_camera_position = glm::vec3(1, 1.5, 6);
-	this->m_camera_target_position = glm::vec3(1, 1.5, 0);
+	this->m_camera_position = glm::vec3(0, 6, 6);
+	this->m_camera_target_position = glm::vec3(1, 3, 0);
 	this->m_camera_up_vector = glm::vec3(0, 1, 0);
 
 	this->m_view_matrix = glm::lookAt(
@@ -100,10 +94,10 @@ void Renderer::InitCamera()
 bool Renderer::InitLights()
 {
 	this->m_light.SetColor(glm::vec3(100.f));
-	this->m_light.SetPosition(glm::vec3(1, 1.5, 6));
+	this->m_light.SetPosition(glm::vec3(1, 5, 6));
 	this->m_light.SetTarget(glm::vec3(1, 1.5, 0));
-	this->m_light.SetConeSize(40, 50);
-	this->m_light.CastShadow(true);
+	this->m_light.SetConeSize(120, 120);
+	this->m_light.CastShadow(false);
 	return true;
 }
 
@@ -247,11 +241,9 @@ bool Renderer::InitCommonItems()
 
 bool Renderer::InitGeometricMeshes()
 {
-	std::array<const char*, 4> assets = {
-		"Assets/Dungeon/GoldenDragon.obj",
-		"Assets/Dungeon/Pedestal.obj",
-		"Assets/Dungeon/Totem.obj",
-		"Assets/Dungeon/Warrior.obj", };
+	std::vector<const char*> assets = {
+		"Assets/Dungeon/Room1_Simple_Small.obj", 
+		};
 
 	bool initialized = true;
 	OBJLoader loader;
@@ -287,10 +279,10 @@ void Renderer::UpdateGeometry(float dt)
 {
 	for (auto& node : this->m_nodes)
 	{
-		node->app_model_matrix =
-			glm::translate(glm::mat4(1.f), node->m_aabb.center) *
-			glm::rotate(glm::mat4(1.f), m_continous_time, glm::vec3(0.f, 1.f, 0.f)) *
-			glm::translate(glm::mat4(1.f), -node->m_aabb.center) * node->model_matrix;
+		/*node->app_model_matrix =
+			glm::translate(glm::mat4(1.f), node->m_aabb.center); /* *
+			/*glm::rotate(glm::mat4(1.f), m_continous_time, glm::vec3(0.f, 1.f, 0.f)) *
+			glm::translate(glm::mat4(1.f), -node->m_aabb.center) * node->model_matrix;*/
 	}
 }
 
@@ -315,6 +307,7 @@ void Renderer::UpdateCamera(float dt)
 	m_camera_target_position = m_camera_position + direction * glm::distance(m_camera_position, m_camera_target_position);
 
 	m_view_matrix = glm::lookAt(m_camera_position, m_camera_target_position, m_camera_up_vector);
+	std::cout << "x position is " << m_camera_position.x << " z position is " << m_camera_position.z << std::endl;
 }
 
 bool Renderer::ReloadShaders()
@@ -458,8 +451,9 @@ void Renderer::RenderCollidableGeometry()
 		int32_t primID = -1;
 		int32_t totalRenderedPrims = 0;
 
-		//if (node->intersectRay(m_camera_position, camera_dir, m_world_matrix, isectT, primID)) continue;
-		//node->intersectRay(m_camera_position, camera_dir, m_world_matrix, isectT, primID);
+		if (node->intersectRay(m_camera_position, camera_dir, m_world_matrix, isectT, primID)) continue;
+		node->intersectRay(m_camera_position, camera_dir, m_world_matrix, isectT, primID);
+		node->intersectRay(m_camera_position, camera_dir, m_world_matrix, isectT, primID);
 
 		glBindVertexArray(node->m_vao);
 
@@ -648,7 +642,7 @@ void Renderer::RenderShadowMaps()
 
 		for (auto& node : this->m_collidables_nodes)
 		{
-			//if (node->intersectRay(m_camera_position, camera_dir, m_world_matrix, isectT, primID)) continue;
+			if (node->intersectRay(m_camera_position, camera_dir, m_world_matrix, isectT, primID)) continue;
 			node->intersectRay(m_camera_position, camera_dir, m_world_matrix, isectT, primID);
 
 			glBindVertexArray(node->m_vao);

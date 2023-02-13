@@ -90,6 +90,11 @@ void Renderer::BuildWorld()
 	GeometryNode& narrow_cor_t_4 = *this->m_nodes[25];
 	GeometryNode& narrow_cor_11 = *this->m_nodes[26];
 	GeometryNode& simple_room_med_2 = *this->m_nodes[27];
+	GeometryNode& totem = *this->m_nodes[28];
+	GeometryNode& pedestal1 = *this->m_nodes[29];
+	GeometryNode& pedestal2 = *this->m_nodes[30];
+	GeometryNode& dragon1 = *this->m_nodes[31];
+	GeometryNode& dragon2 = *this->m_nodes[32];
 	simple_room_1.app_model_matrix= glm::translate(glm::mat4(1.f), glm::vec3(0.f, 0.f, 0.f))*glm::rotate(glm::mat4(1.f),glm::radians(180.f), glm::vec3(0, 1.f, 0.f));
 	hero.app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(0.f, 0.f, 0.f));
 	narrow_cor_1.app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(0.f, 0.f, -3.0f));
@@ -118,7 +123,11 @@ void Renderer::BuildWorld()
 	narrow_cor_t_4.app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(0.f, 0.f, -19.0f)) * glm::rotate(glm::mat4(1.f), glm::radians(-90.f), glm::vec3(0, 1.f, 0.f));
 	narrow_cor_11.app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(-4.f, 0.f, -19.0f)) * glm::rotate(glm::mat4(1.f), glm::radians(-90.f), glm::vec3(0, 1.f, 0.f));
 	simple_room_med_2.app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(0.f, 0.f, -25.0f));
-
+	totem.app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(14.f, 0.f, -7.0f)) * glm::rotate(glm::mat4(1.f), glm::radians(90.f), glm::vec3(0, 1.f, 0.f));
+	pedestal1.app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(4.f, 0.f, -16.0f));
+	pedestal2.app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(0.f, 0.f, -26.0f));
+	dragon1.app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(4.f, 0.f, -16.0f));
+	dragon2.app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(0.f, 0.f, -26.0f));
 }
 
 void Renderer::InitCamera()
@@ -141,7 +150,7 @@ void Renderer::InitCamera()
 bool Renderer::InitLights()
 {
 	this->m_light.SetColor(glm::vec3(100.f));
-	this->m_light.SetPosition(glm::vec3(0, 9, -20));
+	this->m_light.SetPosition(glm::vec3(4, 10, -18));
 	this->m_light.SetTarget(glm::vec3(1, 1.5, 0));
 	this->m_light.SetConeSize(7000, 7000);
 	this->m_light.CastShadow(false);
@@ -317,6 +326,11 @@ bool Renderer::InitGeometricMeshes()
 		"Assets/Dungeon/Corridor1_Narrow_T_Junction.obj",
 		"Assets/Dungeon/Corridor1_Narrow.obj",
 		"Assets/Dungeon/Room1_Simple_Medium.obj",
+		"Assets/Dungeon/Totem.obj",
+		"Assets/Dungeon/Pedestal.obj",
+		"Assets/Dungeon/Pedestal.obj",
+		"Assets/Dungeon/GoldenDragon.obj",
+		"Assets/Dungeon/GoldenDragon.obj",
 
 		};
 
@@ -358,7 +372,13 @@ void Renderer::UpdateGeometry(float dt)
 			glm::translate(glm::mat4(1.f), node->m_aabb.center); /* *
 			/*glm::rotate(glm::mat4(1.f), m_continous_time, glm::vec3(0.f, 1.f, 0.f)) *
 			glm::translate(glm::mat4(1.f), -node->m_aabb.center) * node->model_matrix;*/
+		
 	}
+	//This doesn't work for some reason :/
+	/*auto& node1 = this->m_nodes[31];
+	node1->app_model_matrix= glm::translate(glm::mat4(1.f), node1->m_aabb.center)* 
+			glm::rotate(glm::mat4(1.f), m_continous_time, glm::vec3(0.f, 1.f, 0.f)) *
+			glm::translate(glm::mat4(1.f), -node1->m_aabb.center) * node1->model_matrix;*/
 }
 
 void Renderer::UpdateCamera(float dt)

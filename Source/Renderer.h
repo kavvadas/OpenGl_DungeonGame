@@ -15,16 +15,20 @@ public:
 	// Empty
 
 protected:
-	int												m_screen_width, m_screen_height;
-	glm::mat4										m_world_matrix;
-	glm::mat4										m_view_matrix;
-	glm::mat4										m_projection_matrix;
-	glm::vec3										m_camera_position;
-	glm::vec3										m_camera_target_position;
-	glm::vec3										m_camera_up_vector;
-	glm::vec2										m_camera_movement;
-	glm::vec2										m_camera_look_angle_destination;
-	
+	int	m_screen_width, m_screen_height;
+	glm::mat4 m_world_matrix;
+	glm::mat4 m_view_matrix;
+	glm::mat4 m_projection_matrix;
+	glm::vec3 m_camera_position;
+	glm::vec3 m_camera_target_position;
+	glm::vec3 m_camera_up_vector;
+	glm::vec2 m_camera_movement;
+	glm::vec2 m_camera_look_angle_destination;
+	glm::vec3 m_hero_position;
+	glm::vec3 m_hero_target_position; 
+	glm::vec3 m_hero_movement; 
+	glm::vec3 m_hero_front;
+	float m_hero_speed; 
 	float m_continous_time;
 
 	// Protected Functions
@@ -35,6 +39,7 @@ protected:
 	bool InitIntermediateBuffers();
 	void BuildWorld();
 	void InitCamera();
+	void InitHero();
 	void RenderGeometry();
 	void RenderDeferredShading();
 	void RenderStaticGeometry();
@@ -74,19 +79,20 @@ public:
 
 	Renderer();
 	~Renderer();
-	bool										Init(int SCREEN_WIDTH, int SCREEN_HEIGHT);
-	void										Update(float dt);
-	bool										ResizeBuffers(int SCREEN_WIDTH, int SCREEN_HEIGHT);
-	void										UpdateGeometry(float dt);
-	void										UpdateCamera(float dt);
-	bool										ReloadShaders();
-	void										Render();
+	bool Init(int SCREEN_WIDTH, int SCREEN_HEIGHT);
+	void Update(float dt);
+	bool ResizeBuffers(int SCREEN_WIDTH, int SCREEN_HEIGHT);
+	void UpdateGeometry(float dt);
+	void UpdateCamera(float dt);
+	void UpdateHero(float dt);
+	bool ReloadShaders();
+	void Render();
 
-	void										CameraMoveForward(bool enable);
-	void										CameraMoveBackWard(bool enable);
-	void										CameraMoveLeft(bool enable);
-	void										CameraMoveRight(bool enable);
-	void										CameraLook(glm::vec2 lookDir);
+	void CameraMoveForward(bool enable);
+	void CameraMoveBackWard(bool enable);
+	void CameraMoveLeft(bool enable);
+	void CameraMoveRight(bool enable);
+	void CameraLook(glm::vec2 lookDir);
 };
 
 #endif

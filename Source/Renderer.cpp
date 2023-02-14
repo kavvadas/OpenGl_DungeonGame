@@ -16,6 +16,8 @@ Renderer::Renderer()
 	this->m_nodes = {};
 	this->m_collidables_nodes = {};
 	this->m_continous_time = 0.0;
+
+
 }
 
 Renderer::~Renderer()
@@ -147,10 +149,18 @@ void Renderer::InitCamera()
 		0.1f, 100.f);
 }
 
+void Renderer::InitHero() {
+	this->m_hero_position = glm::vec3(0, 0, 0);
+	this->m_hero_target_position = glm::vec3(1, 0, 0);
+	this->m_hero_front = glm::vec3(1, 1, -1);
+	this->m_hero_speed = 0.5; 
+}
+
+
 bool Renderer::InitLights()
 {
 	this->m_light.SetColor(glm::vec3(100.f));
-	this->m_light.SetPosition(glm::vec3(4, 10, -18));
+	this->m_light.SetPosition(glm::vec3(0, 10, 0));
 	this->m_light.SetTarget(glm::vec3(1, 1.5, 0));
 	this->m_light.SetConeSize(7000, 7000);
 	this->m_light.CastShadow(false);
@@ -361,30 +371,24 @@ void Renderer::Update(float dt)
 {
 	this->UpdateGeometry(dt);
 	this->UpdateCamera(dt);
+	this->UpdateHero(dt);
 	m_continous_time += dt;
 }
 
 void Renderer::UpdateGeometry(float dt)
 {
-	for (auto& node : this->m_nodes)
-	{
-		/*node->app_model_matrix =
-			glm::translate(glm::mat4(1.f), node->m_aabb.center); /* *
-			/*glm::rotate(glm::mat4(1.f), m_continous_time, glm::vec3(0.f, 1.f, 0.f)) *
-			glm::translate(glm::mat4(1.f), -node->m_aabb.center) * node->model_matrix;*/
-		
-	}
-	//This doesn't work for some reason :/
-	/*auto& node1 = this->m_nodes[31];
-	node1->app_model_matrix= glm::translate(glm::mat4(1.f), node1->m_aabb.center)* 
-			glm::rotate(glm::mat4(1.f), m_continous_time, glm::vec3(0.f, 1.f, 0.f)) *
-			glm::translate(glm::mat4(1.f), -node1->m_aabb.center) * node1->model_matrix;*/
+
+	this->m_nodes[31]->app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(4.f, 1.f, -16.f)) *
+		glm::rotate(glm::mat4(1.f), m_continous_time, glm::vec3(0.f, 1.f, 0.f)) *
+		glm::translate(glm::mat4(1.f), -this->m_nodes[31]->m_aabb.center) * this->m_nodes[31]->model_matrix;
+	this->m_nodes[32]->app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(0.f, 1.f, -26.f)) *
+		glm::rotate(glm::mat4(1.f), m_continous_time, glm::vec3(0.f, 1.f, 0.f)) *
+		glm::translate(glm::mat4(1.f), -this->m_nodes[32]->m_aabb.center) * this->m_nodes[32]->model_matrix;
 }
 
 void Renderer::UpdateCamera(float dt)
 {
 	glm::vec3 direction = glm::normalize(m_camera_target_position - m_camera_position);
-
 	m_camera_position = m_camera_position + (m_camera_movement.x * 5.f * dt) * direction;
 	m_camera_target_position = m_camera_target_position + (m_camera_movement.x * 5.f * dt) * direction;
 
@@ -403,6 +407,15 @@ void Renderer::UpdateCamera(float dt)
 
 	m_view_matrix = glm::lookAt(m_camera_position, m_camera_target_position, m_camera_up_vector);
 	std::cout << "x position is " << m_camera_position.x << " z position is " << m_camera_position.z << std::endl;
+}
+
+void::Renderer::UpdateHero(float dt) {
+	//glm::vec3 direction = glm::normalize(m_hero_target_position - m_hero_position);
+	
+	m_hero_position = m_hero_position + (m_hero_movement.x * 1.f * dt);
+	m_hero_target_position = m_hero_target_position + (m_hero_movement.x * 1.f * dt);
+	
+	this->m_nodes[0]->app_model_matrix = glm::translate(glm::mat4(1.f), -glm::vec3( 0.f, 0.f,m_hero_target_position.z));
 }
 
 bool Renderer::ReloadShaders()
@@ -761,10 +774,12 @@ void Renderer::RenderShadowMaps()
 void Renderer::CameraMoveForward(bool enable)
 {
 	m_camera_movement.x = (enable) ? 1 : 0;
+	m_hero_movement.x = (enable) ? 1 : 0;
 }
 void Renderer::CameraMoveBackWard(bool enable)
 {
 	m_camera_movement.x = (enable) ? -1 : 0;
+	m_hero_movement.x = (enable) ? -1 : 0;
 }
 
 void Renderer::CameraMoveLeft(bool enable)

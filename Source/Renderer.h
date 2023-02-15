@@ -25,10 +25,8 @@ protected:
 	glm::vec2 m_camera_movement;
 	glm::vec2 m_camera_look_angle_destination;
 	glm::vec3 m_hero_position;
-	glm::vec3 m_hero_target_position; 
 	glm::vec3 m_hero_movement; 
-	glm::vec3 m_hero_front;
-	float m_hero_speed; 
+	float m_hero_rotation;
 	float m_continous_time;
 
 	// Protected Functions

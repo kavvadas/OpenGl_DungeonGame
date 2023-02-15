@@ -5,7 +5,7 @@
 #include "glm/gtc/type_ptr.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "OBJLoader.h"
-
+#include <cmath>
 #include <algorithm>
 #include <array>
 #include <iostream>
@@ -151,9 +151,7 @@ void Renderer::InitCamera()
 
 void Renderer::InitHero() {
 	this->m_hero_position = glm::vec3(0, 0, 0);
-	this->m_hero_target_position = glm::vec3(1, 0, 0);
-	this->m_hero_front = glm::vec3(1, 1, -1);
-	this->m_hero_speed = 0.5; 
+	this->m_hero_rotation = 0.f;
 }
 
 
@@ -389,6 +387,7 @@ void Renderer::UpdateGeometry(float dt)
 void Renderer::UpdateCamera(float dt)
 {
 	glm::vec3 direction = glm::normalize(m_camera_target_position - m_camera_position);
+	std::cout << "Camera Direction x is " << direction.x << "Camera Direction z is" << direction.z << std::endl;
 	m_camera_position = m_camera_position + (m_camera_movement.x * 5.f * dt) * direction;
 	m_camera_target_position = m_camera_target_position + (m_camera_movement.x * 5.f * dt) * direction;
 
@@ -410,12 +409,15 @@ void Renderer::UpdateCamera(float dt)
 }
 
 void::Renderer::UpdateHero(float dt) {
-	//glm::vec3 direction = glm::normalize(m_hero_target_position - m_hero_position);
 	
-	m_hero_position = m_hero_position + (m_hero_movement.x * 1.f * dt);
-	m_hero_target_position = m_hero_target_position + (m_hero_movement.x * 1.f * dt);
+	glm::vec3 pos_change= glm::vec3((m_hero_movement.x * 1.f * dt)*sin(m_hero_rotation), 0.f, (m_hero_movement.x * 1.f * dt) * cos(m_hero_rotation));
+	float rot_change = m_hero_movement.z * 2.5f * dt; 
+	m_hero_position = m_hero_position + pos_change;
+	m_hero_rotation = m_hero_rotation + rot_change;
+	glm::vec3 pos_change_model = glm::vec3((m_hero_movement.x * 1.f * dt) * sin(rot_change), 0.f, (m_hero_movement.x * 1.f * dt) * cos(rot_change));
+	std::cout << "position x " << m_hero_position.x << " position z " << m_hero_position.z << std::endl;
+	this->m_nodes[0]->app_model_matrix *= glm::translate(glm::mat4(1.f), -pos_change_model) * glm::rotate(glm::mat4(1.f), -rot_change, glm::vec3(0.f, 1.f, 0.f));
 	
-	this->m_nodes[0]->app_model_matrix = glm::translate(glm::mat4(1.f), -glm::vec3( 0.f, 0.f,m_hero_target_position.z));
 }
 
 bool Renderer::ReloadShaders()
@@ -446,7 +448,7 @@ void Renderer::Render()
 void Renderer::RenderPostProcess()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glClearColor(0.f, 0.8f, 1.f, 1.f);
+	glClearColor(0.f, 0.f, 0.f, 0.f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glDisable(GL_DEPTH_TEST);
 
@@ -695,7 +697,7 @@ void Renderer::RenderGeometry()
 	glDrawBuffers(4, drawbuffers);
 
 	glViewport(0, 0, m_screen_width, m_screen_height);
-	glClearColor(0.f, 0.8f, 1.f, 1.f);
+	glClearColor(0.f, 0.f, 0.f, 0.f);
 	glClearDepth(1.f);
 	glDepthFunc(GL_LEQUAL);
 	glDepthMask(GL_TRUE);
@@ -785,10 +787,13 @@ void Renderer::CameraMoveBackWard(bool enable)
 void Renderer::CameraMoveLeft(bool enable)
 {
 	m_camera_movement.y = (enable) ? -1 : 0;
+	m_hero_movement.z = (enable) ? -1 : 0;
 }
 void Renderer::CameraMoveRight(bool enable)
 {
 	m_camera_movement.y = (enable) ? 1 : 0;
+	m_hero_movement.z = (enable) ? 1 : 0;
+
 }
 
 void Renderer::CameraLook(glm::vec2 lookDir)

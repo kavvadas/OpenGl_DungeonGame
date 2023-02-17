@@ -156,7 +156,7 @@ int main(int argc, char *argv[])
 			}
 			else if (event.type == SDL_MOUSEMOTION)
 			{
-				int x = event.motion.x;
+				int x = event.motion.x ;
 				int y = event.motion.y;
 
 				if (mouse_button_pressed)
@@ -173,6 +173,15 @@ int main(int argc, char *argv[])
 					int y = event.button.y;
 					mouse_button_pressed = (event.type == SDL_MOUSEBUTTONDOWN);
 					prev_mouse_position = glm::vec2(x, y);
+				}
+			}
+			else if (event.type == SDL_MOUSEWHEEL)
+			{
+				if (event.wheel.y > 0) {
+					renderer->CameraZoom(-0.5f);
+				}
+				else if (event.wheel.y < 0) {
+					renderer->CameraZoom(0.5f);
 				}
 			}
 			else if (event.type == SDL_WINDOWEVENT)

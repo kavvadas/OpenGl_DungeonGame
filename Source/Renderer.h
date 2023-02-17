@@ -19,15 +19,28 @@ protected:
 	glm::mat4 m_world_matrix;
 	glm::mat4 m_view_matrix;
 	glm::mat4 m_projection_matrix;
+
 	glm::vec3 m_camera_position;
 	glm::vec3 m_camera_target_position;
 	glm::vec3 m_camera_up_vector;
 	glm::vec2 m_camera_movement;
 	glm::vec2 m_camera_look_angle_destination;
+	glm::vec3 m_camera_offset;
+
+	float m_camera_distance=3.f;
+	float angle_around_hero = -180.f;
+
+	float pitch = 70.f;
+	float yaw = 0;
+	float roll;
+
 	glm::vec3 m_hero_position;
 	glm::vec3 m_hero_movement; 
+	glm::vec3 m_hero_direction;
 	float m_hero_rotation;
 	float m_continous_time;
+
+
 
 	// Protected Functions
 	bool InitShaders();
@@ -81,7 +94,7 @@ public:
 	void Update(float dt);
 	bool ResizeBuffers(int SCREEN_WIDTH, int SCREEN_HEIGHT);
 	void UpdateGeometry(float dt);
-	void UpdateCamera(float dt);
+	void UpdateCamera();
 	void UpdateHero(float dt);
 	bool ReloadShaders();
 	void Render();
@@ -91,6 +104,8 @@ public:
 	void CameraMoveLeft(bool enable);
 	void CameraMoveRight(bool enable);
 	void CameraLook(glm::vec2 lookDir);
+	void CameraZoom(float amount);
+
 };
 
 #endif

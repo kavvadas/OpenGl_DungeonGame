@@ -55,6 +55,7 @@ bool Renderer::Init(int SCREEN_WIDTH, int SCREEN_HEIGHT)
 	}
 
 	this->BuildWorld();
+	this->InitHero();
 	this->InitCamera();
 
 	//If everything initialized
@@ -134,13 +135,14 @@ void Renderer::BuildWorld()
 
 void Renderer::InitCamera()
 {
-	this->m_camera_position = glm::vec3(0, 6, 6);
-	this->m_camera_target_position = glm::vec3(1, 3, 0);
+	this->m_camera_position = glm::vec3(0, 2, 3);
+	this->m_camera_target_position = glm::vec3(0 ,1.5, 0);
 	this->m_camera_up_vector = glm::vec3(0, 1, 0);
+	this->m_camera_offset = glm::vec3(0.f, 4.f, 3.f);
 
 	this->m_view_matrix = glm::lookAt(
 		this->m_camera_position,
-		this->m_camera_target_position,
+		this->m_hero_position,
 		m_camera_up_vector);
 
 	this->m_projection_matrix = glm::perspective(
@@ -158,7 +160,7 @@ void Renderer::InitHero() {
 bool Renderer::InitLights()
 {
 	this->m_light.SetColor(glm::vec3(100.f));
-	this->m_light.SetPosition(glm::vec3(0, 10, 0));
+	this->m_light.SetPosition(glm::vec3(0, 0, 0));
 	this->m_light.SetTarget(glm::vec3(1, 1.5, 0));
 	this->m_light.SetConeSize(7000, 7000);
 	this->m_light.CastShadow(false);
@@ -368,7 +370,7 @@ bool Renderer::InitGeometricMeshes()
 void Renderer::Update(float dt)
 {
 	this->UpdateGeometry(dt);
-	this->UpdateCamera(dt);
+	this->UpdateCamera();
 	this->UpdateHero(dt);
 	m_continous_time += dt;
 }
@@ -384,39 +386,59 @@ void Renderer::UpdateGeometry(float dt)
 		glm::translate(glm::mat4(1.f), -this->m_nodes[32]->m_aabb.center) * this->m_nodes[32]->model_matrix;
 }
 
-void Renderer::UpdateCamera(float dt)
+void Renderer::UpdateCamera()
 {
-	glm::vec3 direction = glm::normalize(m_camera_target_position - m_camera_position);
-	std::cout << "Camera Direction x is " << direction.x << "Camera Direction z is" << direction.z << std::endl;
-	m_camera_position = m_camera_position + (m_camera_movement.x * 5.f * dt) * direction;
-	m_camera_target_position = m_camera_target_position + (m_camera_movement.x * 5.f * dt) * direction;
+	//updatecamera
+	glm::vec3 hero_pos = m_nodes[0]->app_model_matrix[3];
+	glm::vec3 hero_rot = m_nodes[0]->app_model_matrix[2];
 
-	glm::vec3 right = glm::normalize(glm::cross(direction, m_camera_up_vector));
 
-	m_camera_position = m_camera_position + (m_camera_movement.y * 5.f * dt) * right;
-	m_camera_target_position = m_camera_target_position + (m_camera_movement.y * 5.f * dt) * right;
+	angle_around_hero -= m_hero_movement.z;//rotate around player
+	float theta = angle_around_hero;
+	float horizontaldist = m_camera_distance * cos(glm::radians(pitch));
+	float verticaldist = m_camera_distance * sin(glm::radians(pitch));
+	float offsetX = horizontaldist * sin(glm::radians(theta));
+	float offsetZ = horizontaldist * cos(glm::radians(theta));
+	std::cout << "dist" <<m_camera_distance<< std::endl;
 
-	float speed = glm::pi<float>() * 0.002;
-	glm::mat4 rotation = glm::rotate(glm::mat4(1.f), m_camera_look_angle_destination.y * speed, right);
-	rotation *= glm::rotate(glm::mat4(1.f), m_camera_look_angle_destination.x * speed, m_camera_up_vector);
-	m_camera_look_angle_destination = glm::vec2(0.f);
+	m_camera_position.x = hero_pos.x - offsetX;
+	m_camera_position.z = hero_pos.z - offsetZ;
+	m_camera_position.y = hero_pos.y + verticaldist;
 
-	direction = rotation * glm::vec4(direction, 0.f);
-	m_camera_target_position = m_camera_position + direction * glm::distance(m_camera_position, m_camera_target_position);
+	m_view_matrix = glm::lookAt(m_camera_position,hero_pos+glm::vec3(0.f,1.5f,0.f), m_camera_up_vector);
 
-	m_view_matrix = glm::lookAt(m_camera_position, m_camera_target_position, m_camera_up_vector);
-	std::cout << "x position is " << m_camera_position.x << " z position is " << m_camera_position.z << std::endl;
 }
 
 void::Renderer::UpdateHero(float dt) {
 	
 	glm::vec3 pos_change= glm::vec3((m_hero_movement.x * 1.f * dt)*sin(m_hero_rotation), 0.f, (m_hero_movement.x * 1.f * dt) * cos(m_hero_rotation));
-	float rot_change = m_hero_movement.z * 2.5f * dt; 
+	float rot_change = m_hero_movement.z * 1.f * dt; 
 	m_hero_position = m_hero_position + pos_change;
 	m_hero_rotation = m_hero_rotation + rot_change;
+
+
 	glm::vec3 pos_change_model = glm::vec3((m_hero_movement.x * 1.f * dt) * sin(rot_change), 0.f, (m_hero_movement.x * 1.f * dt) * cos(rot_change));
 	std::cout << "position x " << m_hero_position.x << " position z " << m_hero_position.z << std::endl;
 	this->m_nodes[0]->app_model_matrix *= glm::translate(glm::mat4(1.f), -pos_change_model) * glm::rotate(glm::mat4(1.f), -rot_change, glm::vec3(0.f, 1.f, 0.f));
+
+
+
+	//update camera2nd
+	//glm::vec3 hero_pos = m_nodes[0]->app_model_matrix[3];
+	//glm::vec3 hero_rot = m_nodes[0]->app_model_matrix[2];
+	//angle_around_hero -= m_hero_movement.z;
+	//float theta = angle_around_hero;
+	//float horizontaldist = m_camera_distance * cos(glm::radians(pitch));
+	//float verticaldist = m_camera_distance * sin(glm::radians(pitch));
+	//float offsetX = horizontaldist * sin(glm::radians(theta));
+	//float offsetZ = horizontaldist * cos(glm::radians(theta));
+	//std::cout << "dist" << m_camera_distance << std::endl;
+	//
+	//m_camera_position.x = hero_pos.x - offsetX;
+	//m_camera_position.z = hero_pos.z - offsetZ;
+	//m_camera_position.y = hero_pos.y + verticaldist;
+	//
+	//m_view_matrix = glm::lookAt(m_camera_position, hero_pos + glm::vec3(0.f, 1.5f, 0.f), m_camera_up_vector);
 	
 }
 
@@ -775,28 +797,32 @@ void Renderer::RenderShadowMaps()
 
 void Renderer::CameraMoveForward(bool enable)
 {
-	m_camera_movement.x = (enable) ? 1 : 0;
 	m_hero_movement.x = (enable) ? 1 : 0;
 }
 void Renderer::CameraMoveBackWard(bool enable)
 {
-	m_camera_movement.x = (enable) ? -1 : 0;
+
 	m_hero_movement.x = (enable) ? -1 : 0;
 }
 
 void Renderer::CameraMoveLeft(bool enable)
 {
-	m_camera_movement.y = (enable) ? -1 : 0;
 	m_hero_movement.z = (enable) ? -1 : 0;
+
 }
 void Renderer::CameraMoveRight(bool enable)
 {
-	m_camera_movement.y = (enable) ? 1 : 0;
 	m_hero_movement.z = (enable) ? 1 : 0;
-
 }
 
 void Renderer::CameraLook(glm::vec2 lookDir)
 {
-	m_camera_look_angle_destination = lookDir;
+	pitch -= lookDir.y*0.1f;
+	angle_around_hero += lookDir.x * 0.1f;
+	
+}
+
+void Renderer::CameraZoom(float amount)
+{
+	m_camera_distance += amount;
 }

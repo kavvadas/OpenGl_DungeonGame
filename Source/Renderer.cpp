@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <array>
 #include <iostream>
+#include "windows.h" 
 
 // RENDERER
 Renderer::Renderer()
@@ -16,8 +17,6 @@ Renderer::Renderer()
 	this->m_nodes = {};
 	this->m_collidables_nodes = {};
 	this->m_continous_time = 0.0;
-
-
 }
 
 Renderer::~Renderer()
@@ -42,7 +41,6 @@ bool Renderer::Init(int SCREEN_WIDTH, int SCREEN_HEIGHT)
 	bool techniques_initialization = InitShaders();
 
 	bool meshes_initialization = InitGeometricMeshes();
-	bool light_initialization = InitLights();
 
 	bool common_initialization = InitCommonItems();
 	bool inter_buffers_initialization = InitIntermediateBuffers();
@@ -57,6 +55,7 @@ bool Renderer::Init(int SCREEN_WIDTH, int SCREEN_HEIGHT)
 	this->BuildWorld();
 	this->InitHero();
 	this->InitCamera();
+	bool light_initialization = InitLights();
 
 	//If everything initialized
 	return techniques_initialization && meshes_initialization &&
@@ -86,7 +85,7 @@ void Renderer::BuildWorld()
 	GeometryNode& narrow_cor_5 = *this->m_nodes[18];
 	GeometryNode& narrow_cor_t_3 = *this->m_nodes[19];
 	GeometryNode& narrow_cor_6 = *this->m_nodes[20];
-	GeometryNode& narrow_cor_7= *this->m_nodes[21];
+	GeometryNode& narrow_cor_7 = *this->m_nodes[21];
 	GeometryNode& narrow_cor_8 = *this->m_nodes[22];
 	GeometryNode& narrow_cor_9 = *this->m_nodes[23];
 	GeometryNode& narrow_cor_10 = *this->m_nodes[24];
@@ -98,7 +97,18 @@ void Renderer::BuildWorld()
 	GeometryNode& pedestal2 = *this->m_nodes[30];
 	GeometryNode& dragon1 = *this->m_nodes[31];
 	GeometryNode& dragon2 = *this->m_nodes[32];
-	simple_room_1.app_model_matrix= glm::translate(glm::mat4(1.f), glm::vec3(0.f, 0.f, 0.f))*glm::rotate(glm::mat4(1.f),glm::radians(180.f), glm::vec3(0, 1.f, 0.f));
+	GeometryNode& well = *this->m_nodes[33];
+	GeometryNode& trap1 = *this->m_nodes[34];
+	GeometryNode& trap2 = *this->m_nodes[35];
+	GeometryNode& trap3 = *this->m_nodes[36];
+	GeometryNode& spikes1 = *this->m_nodes[37];
+	GeometryNode& spikes2 = *this->m_nodes[38];
+	GeometryNode& spikes3 = *this->m_nodes[39];
+	GeometryNode& arrow = *this->m_nodes[40];
+	GeometryNode& arrowOPP = *this->m_nodes[41];
+	GeometryNode& door1 = *this->m_nodes[42];
+
+	simple_room_1.app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(0.f, 0.f, 0.f)) * glm::rotate(glm::mat4(1.f), glm::radians(180.f), glm::vec3(0, 1.f, 0.f));
 	hero.app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(0.f, 0.f, 0.f));
 	narrow_cor_1.app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(0.f, 0.f, -3.0f));
 	narrow_cor_2.app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(0.f, 0.f, -5.0f));
@@ -107,11 +117,11 @@ void Renderer::BuildWorld()
 	medium_cor_1.app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(4.f, 0.f, -11.0f));
 	medium_cor_2.app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(4.f, 0.f, -13.0f));
 	simple_room_2.app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(4.f, 0.f, -16.0f));
-	narrow_cor_3.app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(8.f, 0.f, -7.0f))*glm::rotate(glm::mat4(1.f), glm::radians(90.f), glm::vec3(0, 1.f, 0.f));
+	narrow_cor_3.app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(8.f, 0.f, -7.0f)) * glm::rotate(glm::mat4(1.f), glm::radians(90.f), glm::vec3(0, 1.f, 0.f));
 	simple_room_med_1.app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(12.f, 0.f, -7.0f)) * glm::rotate(glm::mat4(1.f), glm::radians(-90.f), glm::vec3(0, 1.f, 0.f));
 	narrow_cor_4.app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(-4.f, 0.f, -7.0f)) * glm::rotate(glm::mat4(1.f), glm::radians(90.f), glm::vec3(0, 1.f, 0.f));;
 	narrow_cor_t_2.app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(-6.0f, 0.f, -7.0f)) * glm::rotate(glm::mat4(1.f), glm::radians(90.f), glm::vec3(0, 1.f, 0.f));
-	hall.app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(-6.0f, 0.f, -11.0f)) ;
+	hall.app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(-6.0f, 0.f, -11.0f));
 	wall1.app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(-3.0f, 0.f, -10.0f)) * glm::rotate(glm::mat4(1.f), glm::radians(90.f), glm::vec3(0, 1.f, 0.f));
 	wall2.app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(-3.0f, 0.f, -14.0f)) * glm::rotate(glm::mat4(1.f), glm::radians(90.f), glm::vec3(0, 1.f, 0.f));
 	wall3.app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(-9.5f, 0.f, -10.0f)) * glm::rotate(glm::mat4(1.f), glm::radians(90.f), glm::vec3(0, 1.f, 0.f));
@@ -126,19 +136,37 @@ void Renderer::BuildWorld()
 	narrow_cor_t_4.app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(0.f, 0.f, -19.0f)) * glm::rotate(glm::mat4(1.f), glm::radians(-90.f), glm::vec3(0, 1.f, 0.f));
 	narrow_cor_11.app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(-4.f, 0.f, -19.0f)) * glm::rotate(glm::mat4(1.f), glm::radians(-90.f), glm::vec3(0, 1.f, 0.f));
 	simple_room_med_2.app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(0.f, 0.f, -25.0f));
-	totem.app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(14.f, 0.f, -7.0f)) * glm::rotate(glm::mat4(1.f), glm::radians(90.f), glm::vec3(0, 1.f, 0.f));
+	totem.app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(-6.f, 0.f, -12.f));
 	pedestal1.app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(4.f, 0.f, -16.0f));
 	pedestal2.app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(0.f, 0.f, -26.0f));
 	dragon1.app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(4.f, 0.f, -16.0f));
 	dragon2.app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(0.f, 0.f, -26.0f));
+	well.app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(-6.f, 0.f, -12.f));
+	trap1.app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(4.f, 0.f, -12.f));
+	trap2.app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(-4.5f, 0.f, -12.f));
+	trap3.app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(-7.5f, 0.f, -12.f));
+	spikes1.app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(4.f, 0.f, -12.f));
+	spikes2.app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(-4.5f, 0.f, -12.f));
+	spikes3.app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(-7.5f, 0.f, -12.f));
+	arrow.app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(-6.f, 0.f, -12.f));
+	arrowOPP.app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(-6.f, 0.f, -12.f)) * glm::rotate(glm::mat4(1.f), glm::radians(180.f), glm::vec3(0, 1.f, 0.f));
+	door1.app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(9.5f, 0.f, -7.39f)) * glm::rotate(glm::mat4(1.f), glm::radians(-90.f), glm::vec3(0, 1.f, 0.f));
+
+
+	// Initialize m_border_map with 1000 values (1000) means the hero is not free to move
+	for (int i = 0; i < 200; i++) {
+		for (int j = 0; j < 200; j++) {
+			m_border_map[i][j].reset();
+			m_border_map[i][j].set(3);
+		}
+	}
 }
 
 void Renderer::InitCamera()
 {
 	this->m_camera_position = glm::vec3(0, 2, 3);
-	this->m_camera_target_position = glm::vec3(0 ,1.5, 0);
+	this->m_camera_target_position = glm::vec3(0, 1.5, 0);
 	this->m_camera_up_vector = glm::vec3(0, 1, 0);
-	this->m_camera_offset = glm::vec3(0.f, 4.f, 3.f);
 
 	this->m_view_matrix = glm::lookAt(
 		this->m_camera_position,
@@ -152,18 +180,26 @@ void Renderer::InitCamera()
 }
 
 void Renderer::InitHero() {
-	this->m_hero_position = glm::vec3(0, 0, 0);
+	this->m_hero_position = glm::vec3(0.f, 0.f, 0.f);
 	this->m_hero_rotation = 0.f;
 }
 
 
 bool Renderer::InitLights()
 {
-	this->m_light.SetColor(glm::vec3(100.f));
-	this->m_light.SetPosition(glm::vec3(0, 0, 0));
-	this->m_light.SetTarget(glm::vec3(1, 1.5, 0));
-	this->m_light.SetConeSize(7000, 7000);
+	this->m_spotlight.SetColor(glm::vec3(50.f));
+	this->m_spotlight.SetPosition(glm::vec3(-6.f, 2.f, -12.f));
+	this->m_spotlight.SetTarget(glm::vec3(m_spotlight.GetPosition().x, 0.f, m_spotlight.GetPosition().z));
+	this->m_spotlight.SetConeSize(90, 90);
+	this->m_spotlight.CastShadow(false);
+
+	this->m_light.SetColor(glm::vec3(50.f));
+	this->m_light.SetPosition(m_camera_position);
+	this->m_light.SetTarget(hero_pos);
+	this->m_light.SetConeSize(90, 90);
 	this->m_light.CastShadow(false);
+
+
 	return true;
 }
 
@@ -235,7 +271,7 @@ bool Renderer::ResizeBuffers(int width, int height)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, m_screen_width, m_screen_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-	
+
 	glBindTexture(GL_TEXTURE_2D, m_fbo_normal_texture);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -341,8 +377,17 @@ bool Renderer::InitGeometricMeshes()
 		"Assets/Dungeon/Pedestal.obj",
 		"Assets/Dungeon/GoldenDragon.obj",
 		"Assets/Dungeon/GoldenDragon.obj",
-
-		};
+		"Assets/Dungeon/Well.obj",
+		"Assets/Dungeon/SpikeTrap.obj",
+		"Assets/Dungeon/SpikeTrap.obj",
+		"Assets/Dungeon/SpikeTrap.obj",
+		"Assets/Dungeon/Spikes.obj",
+		"Assets/Dungeon/Spikes.obj",
+		"Assets/Dungeon/Spikes.obj",
+		"Assets/Dungeon/Arrow.obj",
+		"Assets/Dungeon/Arrow.obj",
+		"Assets/Dungeon/Door1.obj"
+	};
 
 	bool initialized = true;
 	OBJLoader loader;
@@ -372,74 +417,153 @@ void Renderer::Update(float dt)
 	this->UpdateGeometry(dt);
 	this->UpdateCamera();
 	this->UpdateHero(dt);
+	this->UpdateDoor(dt);
+
 	m_continous_time += dt;
+	time_elapsed += dt;
 }
 
 void Renderer::UpdateGeometry(float dt)
 {
-
 	this->m_nodes[31]->app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(4.f, 1.f, -16.f)) *
 		glm::rotate(glm::mat4(1.f), m_continous_time, glm::vec3(0.f, 1.f, 0.f)) *
 		glm::translate(glm::mat4(1.f), -this->m_nodes[31]->m_aabb.center) * this->m_nodes[31]->model_matrix;
 	this->m_nodes[32]->app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(0.f, 1.f, -26.f)) *
 		glm::rotate(glm::mat4(1.f), m_continous_time, glm::vec3(0.f, 1.f, 0.f)) *
 		glm::translate(glm::mat4(1.f), -this->m_nodes[32]->m_aabb.center) * this->m_nodes[32]->model_matrix;
+	this->m_nodes[28]->app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(-6.f, 1.f, -12.f)) *
+		glm::rotate(glm::mat4(1.f), m_continous_time * 0.5f, glm::vec3(0.f, 1.f, 0.f)) *
+		glm::translate(glm::mat4(1.f), -this->m_nodes[28]->m_aabb.center) * this->m_nodes[28]->model_matrix;
+	if (!arrow_fired && time_elapsed >= time_fired)
+	{
+		this->m_nodes[40]->app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(-6.f, 1.3f, -12.f)) *
+			glm::rotate(glm::mat4(1.f), m_continous_time * 0.5f, glm::vec3(0.f, 1.3f, 0.f)) *
+			glm::translate(glm::mat4(1.f), -this->m_nodes[40]->m_aabb.center) * this->m_nodes[40]->model_matrix;
+		this->m_nodes[41]->app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(-6.f, 1.3f, -12.f)) *
+			glm::rotate(glm::mat4(1.f), m_continous_time * 0.5f + glm::radians(180.f), glm::vec3(0.f, 1.3f, 0.f)) *
+			glm::translate(glm::mat4(1.f), -this->m_nodes[41]->m_aabb.center) * this->m_nodes[41]->model_matrix;
+
+		arrow_fired = true;
+	}
+
+
+	ThrowArrow(dt);
+	SpikeEnable(dt);
+
+
+}
+void Renderer::ThrowArrow(float dt) {
+
+	if (m_ttl > 0.f) {
+		this->m_nodes[40]->app_model_matrix *= glm::translate(glm::mat4(1.f), glm::vec3(0.f, 0.f, -this->m_nodes[40]->app_model_matrix[1].z + dt * 2));
+		this->m_nodes[41]->app_model_matrix *= glm::translate(glm::mat4(1.f), glm::vec3(0.f, 0.f, this->m_nodes[41]->app_model_matrix[1].z + dt * 2));
+		//std::cout <<"Z" << this->m_nodes[38]->app_model_matrix[3].z << std::endl;
+		m_ttl -= dt;
+
+	}
+	else if (m_ttl <= 0.f) {
+		arrow_fired = false;
+		m_ttl = 2.f;
+		time_elapsed = 0.f;
+	}
 }
 
+void Renderer::SpikeEnable(float dt) {
+
+
+	if (!spike_up)
+	{
+
+		if (this->m_nodes[37]->app_model_matrix[3].y <= 1.5 && this->m_nodes[38]->app_model_matrix[3].y && this->m_nodes[39]->app_model_matrix[3].y) {
+			this->m_nodes[37]->app_model_matrix *= glm::translate(glm::mat4(1.f), glm::vec3(0.f, this->m_nodes[37]->app_model_matrix[0].y + dt * 8, 0.f));
+			this->m_nodes[38]->app_model_matrix *= glm::translate(glm::mat4(1.f), glm::vec3(0.f, this->m_nodes[38]->app_model_matrix[0].y + dt * 8, 0.f));
+			this->m_nodes[39]->app_model_matrix *= glm::translate(glm::mat4(1.f), glm::vec3(0.f, this->m_nodes[39]->app_model_matrix[0].y + dt * 8, 0.f));
+		}
+		else {
+			time_spike_up += dt;
+			if (time_spike_up >= 2)
+			{
+				spike_up = true;
+				time_spike_up = 0;
+			}
+		}
+	}
+	else {
+
+		if (this->m_nodes[37]->app_model_matrix[3].y >= 0 && this->m_nodes[38]->app_model_matrix[3].y >= 0 && this->m_nodes[39]->app_model_matrix[3].y >= 0)
+		{
+			this->m_nodes[37]->app_model_matrix *= glm::translate(glm::mat4(1.f), glm::vec3(0.f, this->m_nodes[37]->app_model_matrix[0].y - dt * 1.1, 0.f));
+			this->m_nodes[38]->app_model_matrix *= glm::translate(glm::mat4(1.f), glm::vec3(0.f, this->m_nodes[38]->app_model_matrix[0].y - dt * 1.1, 0.f));
+			this->m_nodes[39]->app_model_matrix *= glm::translate(glm::mat4(1.f), glm::vec3(0.f, this->m_nodes[39]->app_model_matrix[0].y - dt * 1.1, 0.f));
+
+		}
+		else {
+			time_spike_down += dt;
+			if (time_spike_down >= 2.5) {
+				spike_up = false;
+				time_spike_down = 0;
+			}
+		}
+	}
+}
+
+
+void Renderer::UpdateDoor(float dt) {
+	if (canOpen && !opened) {
+		if (rotationAngle < 2.8) {
+			rotationAngle += dt * 2;
+			m_nodes[42]->app_model_matrix *= glm::rotate(glm::mat4(1.f), glm::radians(rotationAngle), glm::vec3(0.f, 1.f, 0.f));
+		}
+		else {
+			std::cout << rotationAngle << std::endl;
+			m_nodes[42]->app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(9.5f, 0.f, -7.39f)) * glm::rotate(glm::mat4(1.f), glm::radians(0.f), glm::vec3(0, 1.f, 0.f));
+			rotationAngle = 2.8;
+			opened = true;
+		}
+	}
+
+	if (canClose && opened) {
+		if (rotationAngle > 0) {
+			rotationAngle -= dt * 2;
+			m_nodes[42]->app_model_matrix *= glm::rotate(glm::mat4(1.f), glm::radians(-rotationAngle), glm::vec3(0.f, 1.f, 0.f));
+		}
+		else {
+			m_nodes[42]->app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(9.5f, 0.f, -7.39f)) * glm::rotate(glm::mat4(1.f), glm::radians(-90.f), glm::vec3(0, 1.f, 0.f));
+			rotationAngle = 0;
+			opened = false;
+		}
+	}
+
+}
 void Renderer::UpdateCamera()
-{
+{ 
 	//updatecamera
-	glm::vec3 hero_pos = m_nodes[0]->app_model_matrix[3];
-	glm::vec3 hero_rot = m_nodes[0]->app_model_matrix[2];
-
-
-	angle_around_hero -= m_hero_movement.z;//rotate around player
+	//angle_around_hero -= m_hero_movement.z*1.5;//rotate around player
 	float theta = angle_around_hero;
 	float horizontaldist = m_camera_distance * cos(glm::radians(pitch));
 	float verticaldist = m_camera_distance * sin(glm::radians(pitch));
 	float offsetX = horizontaldist * sin(glm::radians(theta));
 	float offsetZ = horizontaldist * cos(glm::radians(theta));
-	std::cout << "dist" <<m_camera_distance<< std::endl;
-
-	m_camera_position.x = hero_pos.x - offsetX;
-	m_camera_position.z = hero_pos.z - offsetZ;
-	m_camera_position.y = hero_pos.y + verticaldist;
-
-	m_view_matrix = glm::lookAt(m_camera_position,hero_pos+glm::vec3(0.f,1.5f,0.f), m_camera_up_vector);
-
+	m_camera_position.x = m_hero_position.x - offsetX;
+	m_camera_position.z = m_hero_position.z - offsetZ;
+	m_camera_position.y = m_hero_position.y + verticaldist +25;
+	this->m_light.SetTarget(m_hero_position);
+	this->m_light.SetPosition(glm::vec3(m_hero_position.x, 5.f, m_hero_position.z));
+	std::cout << "pos x: " << m_hero_position.x << "pos z: " << m_hero_position.z << std::endl;
+	m_view_matrix = glm::lookAt(m_camera_position, m_hero_position + glm::vec3(0.f, 1.6f, 0.f), m_camera_up_vector);
+	
 }
 
 void::Renderer::UpdateHero(float dt) {
 	
-	glm::vec3 pos_change= glm::vec3((m_hero_movement.x * 1.f * dt)*sin(m_hero_rotation), 0.f, (m_hero_movement.x * 1.f * dt) * cos(m_hero_rotation));
-	float rot_change = m_hero_movement.z * 1.f * dt; 
-	m_hero_position = m_hero_position + pos_change;
-	m_hero_rotation = m_hero_rotation + rot_change;
-
-
-	glm::vec3 pos_change_model = glm::vec3((m_hero_movement.x * 1.f * dt) * sin(rot_change), 0.f, (m_hero_movement.x * 1.f * dt) * cos(rot_change));
-	std::cout << "position x " << m_hero_position.x << " position z " << m_hero_position.z << std::endl;
-	this->m_nodes[0]->app_model_matrix *= glm::translate(glm::mat4(1.f), -pos_change_model) * glm::rotate(glm::mat4(1.f), -rot_change, glm::vec3(0.f, 1.f, 0.f));
-
-
-
-	//update camera2nd
-	//glm::vec3 hero_pos = m_nodes[0]->app_model_matrix[3];
-	//glm::vec3 hero_rot = m_nodes[0]->app_model_matrix[2];
-	//angle_around_hero -= m_hero_movement.z;
-	//float theta = angle_around_hero;
-	//float horizontaldist = m_camera_distance * cos(glm::radians(pitch));
-	//float verticaldist = m_camera_distance * sin(glm::radians(pitch));
-	//float offsetX = horizontaldist * sin(glm::radians(theta));
-	//float offsetZ = horizontaldist * cos(glm::radians(theta));
-	//std::cout << "dist" << m_camera_distance << std::endl;
-	//
-	//m_camera_position.x = hero_pos.x - offsetX;
-	//m_camera_position.z = hero_pos.z - offsetZ;
-	//m_camera_position.y = hero_pos.y + verticaldist;
-	//
-	//m_view_matrix = glm::lookAt(m_camera_position, hero_pos + glm::vec3(0.f, 1.5f, 0.f), m_camera_up_vector);
-	
+	//if (m_border_map[]
+		glm::vec3 pos_change = glm::vec3((m_hero_movement.x * 1.f * dt) * sin(m_hero_rotation), 0.f, (m_hero_movement.x * 1.f * dt) * cos(m_hero_rotation));
+		rot_change = m_hero_movement.z * 2.5 * dt;
+		m_hero_position = m_hero_position + pos_change;
+		m_hero_rotation = m_hero_rotation + rot_change;
+		glm::vec3 pos_change_model = glm::vec3((m_hero_movement.x * 1.f * dt) * sin(rot_change), 0.f, (m_hero_movement.x * 1.f * dt) * cos(rot_change));
+		this->m_nodes[0]->app_model_matrix *= glm::translate(glm::mat4(1.f), pos_change_model) * glm::rotate(glm::mat4(1.f), rot_change, glm::vec3(0.f, 1.f, 0.f));
+		std::cout << "pos x: " << hero_pos.x<< "pos z: " << hero_pos.z << std::endl;
 }
 
 bool Renderer::ReloadShaders()
@@ -470,7 +594,7 @@ void Renderer::Render()
 void Renderer::RenderPostProcess()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glClearColor(0.f, 0.f, 0.f, 0.f);
+	glClearColor(0.f, 0.f, 0.8f, 0.f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glDisable(GL_DEPTH_TEST);
 
@@ -481,7 +605,7 @@ void Renderer::RenderPostProcess()
 	m_post_program.loadInt("uniform_texture", 0);
 
 	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, m_light.GetShadowMapDepthTexture());
+	glBindTexture(GL_TEXTURE_2D, m_spotlight.GetShadowMapDepthTexture());
 	m_post_program.loadInt("uniform_shadow_map", 1);
 
 	glActiveTexture(GL_TEXTURE2);
@@ -654,10 +778,56 @@ void Renderer::RenderDeferredShading()
 
 	glDisable(GL_DEPTH_TEST);
 	glDepthMask(GL_FALSE);
-	
+
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	m_deferred_program.Bind();
+
+	m_deferred_program.loadVec3("uniform_light_color", m_spotlight.GetColor());
+	m_deferred_program.loadVec3("uniform_light_dir", m_spotlight.GetDirection());
+	m_deferred_program.loadVec3("uniform_light_pos", m_spotlight.GetPosition());
+
+	m_deferred_program.loadFloat("uniform_light_umbra", m_spotlight.GetUmbra());
+	m_deferred_program.loadFloat("uniform_light_penumbra", m_spotlight.GetPenumbra());
+
+	m_deferred_program.loadVec3("uniform_camera_pos", m_camera_position);
+	m_deferred_program.loadVec3("uniform_camera_dir", normalize(m_camera_target_position - m_camera_position));
+
+	m_deferred_program.loadMat4("uniform_light_projection_view", m_spotlight.GetProjectionMatrix() * m_spotlight.GetViewMatrix());
+	m_deferred_program.loadInt("uniform_cast_shadows", m_spotlight.GetCastShadowsStatus() ? 1 : 0);
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, m_fbo_pos_texture);
+	m_deferred_program.loadInt("uniform_tex_pos", 0);
+
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, m_fbo_normal_texture);
+	m_deferred_program.loadInt("uniform_tex_normal", 1);
+
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_2D, m_fbo_albedo_texture);
+	m_deferred_program.loadInt("uniform_tex_albedo", 2);
+
+	glActiveTexture(GL_TEXTURE3);
+	glBindTexture(GL_TEXTURE_2D, m_fbo_mask_texture);
+	m_deferred_program.loadInt("uniform_tex_mask", 3);
+
+	glActiveTexture(GL_TEXTURE4);
+	glBindTexture(GL_TEXTURE_2D, m_fbo_depth_texture);
+	m_deferred_program.loadInt("uniform_tex_depth", 4);
+
+	glActiveTexture(GL_TEXTURE10);
+	glBindTexture(GL_TEXTURE_2D, m_spotlight.GetShadowMapDepthTexture());
+	m_deferred_program.loadInt("uniform_shadow_map", 10);
+
+	glBindVertexArray(m_vao_fbo);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	glBindVertexArray(0);
+
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_ONE, GL_ONE);
+
 
 	m_deferred_program.loadVec3("uniform_light_color", m_light.GetColor());
 	m_deferred_program.loadVec3("uniform_light_dir", m_light.GetDirection());
@@ -703,6 +873,8 @@ void Renderer::RenderDeferredShading()
 	m_deferred_program.Unbind();
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glDepthMask(GL_TRUE);
+
+	glDisable(GL_BLEND);
 }
 
 void Renderer::RenderGeometry()
@@ -719,7 +891,7 @@ void Renderer::RenderGeometry()
 	glDrawBuffers(4, drawbuffers);
 
 	glViewport(0, 0, m_screen_width, m_screen_height);
-	glClearColor(0.f, 0.f, 0.f, 0.f);
+	glClearColor(0.f, 0.f, 0.8f, 0.f);
 	glClearDepth(1.f);
 	glDepthFunc(GL_LEQUAL);
 	glDepthMask(GL_TRUE);
@@ -740,11 +912,11 @@ void Renderer::RenderGeometry()
 
 void Renderer::RenderShadowMaps()
 {
-	if (m_light.GetCastShadowsStatus())
+	if (m_spotlight.GetCastShadowsStatus())
 	{
-		int m_depth_texture_resolution = m_light.GetShadowMapResolution();
+		int m_depth_texture_resolution = m_spotlight.GetShadowMapResolution();
 
-		glBindFramebuffer(GL_FRAMEBUFFER, m_light.GetShadowMapFBO());
+		glBindFramebuffer(GL_FRAMEBUFFER, m_spotlight.GetShadowMapFBO());
 		glViewport(0, 0, m_depth_texture_resolution, m_depth_texture_resolution);
 		glEnable(GL_DEPTH_TEST);
 		glClear(GL_DEPTH_BUFFER_BIT);
@@ -752,7 +924,7 @@ void Renderer::RenderShadowMaps()
 		// Bind the shadow mapping program
 		m_spot_light_shadow_map_program.Bind();
 
-		glm::mat4 proj = m_light.GetProjectionMatrix() * m_light.GetViewMatrix() * m_world_matrix;
+		glm::mat4 proj = m_spotlight.GetProjectionMatrix() * m_spotlight.GetViewMatrix() * m_world_matrix;
 
 		for (auto& node : this->m_nodes)
 		{
@@ -797,32 +969,58 @@ void Renderer::RenderShadowMaps()
 
 void Renderer::CameraMoveForward(bool enable)
 {
-	m_hero_movement.x = (enable) ? 1 : 0;
+	m_hero_movement.x = (enable) ? -1 : 0;
+
 }
 void Renderer::CameraMoveBackWard(bool enable)
 {
 
-	m_hero_movement.x = (enable) ? -1 : 0;
+	m_hero_movement.x = (enable) ? 0.5 : 0;
 }
 
 void Renderer::CameraMoveLeft(bool enable)
 {
-	m_hero_movement.z = (enable) ? -1 : 0;
+	m_hero_movement.z = (enable) ? 1 : 0;
 
 }
 void Renderer::CameraMoveRight(bool enable)
 {
-	m_hero_movement.z = (enable) ? 1 : 0;
+	m_hero_movement.z = (enable) ? -1 : 0;
 }
 
 void Renderer::CameraLook(glm::vec2 lookDir)
 {
-	pitch -= lookDir.y*0.1f;
+	pitch -= lookDir.y * 0.1f;
 	angle_around_hero += lookDir.x * 0.1f;
-	
+
 }
 
 void Renderer::CameraZoom(float amount)
 {
-	m_camera_distance += amount;
+	if (m_camera_distance >= 2 && m_camera_distance <= 4) {
+		m_camera_distance += amount / 4;
+		std::cout << m_camera_distance << std::endl;
+	}
+	else if (m_camera_distance == 1.875) {
+		m_camera_distance = 2;
+	}
+	else if (m_camera_distance == 4.125) {
+		m_camera_distance = 4;
+	}
+}
+
+void Renderer::HeroDoorCheck() {
+	std::cout << "z" << hero_pos.x << std::endl;
+	if ((hero_pos.x <= m_nodes[42]->app_model_matrix[3].x - 1 && hero_pos.x >= m_nodes[42]->app_model_matrix[3].x - 2 ||//7,5 8,5
+		hero_pos.x >= m_nodes[42]->app_model_matrix[3].x + 1 && hero_pos.x <= m_nodes[42]->app_model_matrix[3].x + 2)) {//[10,5 1.5		
+		if (!opened) {
+			canOpen = true;
+			canClose = false;
+		}
+
+		if (opened) {
+			canClose = true;
+			canOpen = false;
+		}
+	}
 }

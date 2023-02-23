@@ -8,17 +8,17 @@
 using namespace std;
 
 //Screen attributes
-SDL_Window * window;
+SDL_Window* window;
 
 //OpenGL context 
 SDL_GLContext gContext;
-const int SCREEN_WIDTH = 1024;
-const int SCREEN_HEIGHT = 860;
+const int SCREEN_WIDTH = 1080;
+const int SCREEN_HEIGHT = 640;
 
 //Event handler
 SDL_Event event;
 
-Renderer * renderer = nullptr;
+Renderer* renderer = nullptr;
 
 void clean_up()
 {
@@ -48,7 +48,7 @@ bool init()
 
 	// Create Window
 	window = SDL_CreateWindow("OpenGL Lab 3",
-		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+		1, 1,
 		SCREEN_WIDTH, SCREEN_HEIGHT,
 		SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
 
@@ -86,7 +86,7 @@ bool init()
 	return engine_initialized;
 }
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
 	//Initialize SDL, glew, engine
 	if (init() == false)
@@ -116,7 +116,7 @@ int main(int argc, char *argv[])
 			{
 				// Key down events
 				if (event.key.keysym.sym == SDLK_ESCAPE) quit = true;
-				else if (event.key.keysym.sym == SDLK_r) renderer->ReloadShaders();
+				//else if (event.key.keysym.sym == SDLK_r) renderer->ReloadShaders();
 				else if (event.key.keysym.sym == SDLK_w || event.key.keysym.sym == SDLK_UP)
 				{
 					renderer->CameraMoveForward(true);
@@ -132,6 +132,9 @@ int main(int argc, char *argv[])
 				else if (event.key.keysym.sym == SDLK_d || event.key.keysym.sym == SDLK_RIGHT)
 				{
 					renderer->CameraMoveRight(true);
+				}
+				else if (event.key.keysym.sym == SDLK_r) {
+					renderer->HeroDoorCheck();
 				}
 			}
 			else if (event.type == SDL_KEYUP)
@@ -156,7 +159,7 @@ int main(int argc, char *argv[])
 			}
 			else if (event.type == SDL_MOUSEMOTION)
 			{
-				int x = event.motion.x ;
+				int x = event.motion.x;
 				int y = event.motion.y;
 
 				if (mouse_button_pressed)
@@ -206,7 +209,7 @@ int main(int argc, char *argv[])
 
 		// Draw
 		renderer->Render();
-		
+
 		//Update screen (swap buffer for double buffering)
 		SDL_GL_SwapWindow(window);
 	}

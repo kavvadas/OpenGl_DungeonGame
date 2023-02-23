@@ -8,6 +8,8 @@
 #include "GeometryNode.h"
 #include "CollidableNode.h"
 #include "LightNode.h"
+#include <bitset>
+
 
 class Renderer
 {
@@ -23,24 +25,36 @@ protected:
 	glm::vec3 m_camera_position;
 	glm::vec3 m_camera_target_position;
 	glm::vec3 m_camera_up_vector;
-	glm::vec2 m_camera_movement;
-	glm::vec2 m_camera_look_angle_destination;
-	glm::vec3 m_camera_offset;
 
-	float m_camera_distance=3.f;
+	float m_camera_distance = 3.f;
 	float angle_around_hero = -180.f;
 
 	float pitch = 70.f;
-	float yaw = 0;
-	float roll;
 
+	glm::vec3 hero_pos;
 	glm::vec3 m_hero_position;
-	glm::vec3 m_hero_movement; 
+	glm::vec3 m_hero_movement;
 	glm::vec3 m_hero_direction;
+	float rot_change;
 	float m_hero_rotation;
+
+
 	float m_continous_time;
 
+	std::bitset<4> m_border_map[200][200];
+	float m_ttl = 2.f;
+	bool arrow_fired = false;
+	float time_fired = 2.f;
+	float time_elapsed;
 
+	bool spike_up = false;
+	float time_spike_down = 0;
+	float time_spike_up = 0;
+
+	bool canOpen = false;
+	bool opened = false;
+	float rotationAngle = 0.0f;
+	bool canClose = false;
 
 	// Protected Functions
 	bool InitShaders();
@@ -68,11 +82,12 @@ protected:
 	std::vector<GeometryNode*> m_nodes;
 	std::vector<CollidableNode*> m_collidables_nodes;
 
-	LightNode									m_light;
-	ShaderProgram								m_geometry_program;
-	ShaderProgram								m_deferred_program;
-	ShaderProgram								m_post_program;
-	ShaderProgram								m_spot_light_shadow_map_program;
+	LightNode		m_light;
+	LightNode		m_spotlight;
+	ShaderProgram	m_geometry_program;
+	ShaderProgram	m_deferred_program;
+	ShaderProgram	m_post_program;
+	ShaderProgram	m_spot_light_shadow_map_program;
 
 	GLuint m_fbo;
 	GLuint m_vao_fbo;
@@ -94,6 +109,9 @@ public:
 	void Update(float dt);
 	bool ResizeBuffers(int SCREEN_WIDTH, int SCREEN_HEIGHT);
 	void UpdateGeometry(float dt);
+	void ThrowArrow(float dt);
+	void SpikeEnable(float dt);
+	void UpdateDoor(float dt);
 	void UpdateCamera();
 	void UpdateHero(float dt);
 	bool ReloadShaders();
@@ -105,6 +123,8 @@ public:
 	void CameraMoveRight(bool enable);
 	void CameraLook(glm::vec2 lookDir);
 	void CameraZoom(float amount);
+
+	void HeroDoorCheck();
 
 };
 

@@ -154,10 +154,29 @@ void Renderer::BuildWorld()
 
 
 	// Initialize m_border_map with 1000 values (1000) means the hero is not free to move
-	for (int i = 0; i < 200; i++) {
-		for (int j = 0; j < 200; j++) {
-			m_border_map[i][j].reset();
-			m_border_map[i][j].set(3);
+	int sum = 0;
+	for (int i = 0; i < 48; i++) {
+		for (int j = 0; j < 60; j++) {
+			if (((i <= 15 || i>19) && (j > 50)) 
+				|| (j == 58)&&(i >= 15 && i <= 18) || ((j == 53) && (i <= 16 || i >= 19))
+				)
+			{
+				m_border_map[i][j].reset();
+				m_border_map[i][j].set(3);
+				//std::cout << m_border_map[i][j] << std::endl;
+			}
+			//if ((i< 17 || i >18) && (j <= 52 && j >= 43)) {
+			//	//m_border_map[i][j].reset();
+			//	m_border_map[i][j].set(3);
+			//}
+			//if (j <= 43 && (i <= 16 || (i >= 18&&i<=38))) {
+			//	m_border_map[i][j].set(3);
+			//}
+		
+
+		
+
+			//m_border_map[i][j].set(2);
 		}
 	}
 }
@@ -515,7 +534,7 @@ void Renderer::UpdateDoor(float dt) {
 			m_nodes[42]->app_model_matrix *= glm::rotate(glm::mat4(1.f), glm::radians(rotationAngle), glm::vec3(0.f, 1.f, 0.f));
 		}
 		else {
-			std::cout << rotationAngle << std::endl;
+			//std::cout << rotationAngle << std::endl;
 			m_nodes[42]->app_model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(9.5f, 0.f, -7.39f)) * glm::rotate(glm::mat4(1.f), glm::radians(0.f), glm::vec3(0, 1.f, 0.f));
 			rotationAngle = 2.8;
 			opened = true;
@@ -546,10 +565,10 @@ void Renderer::UpdateCamera()
 	float offsetZ = horizontaldist * cos(glm::radians(theta));
 	m_camera_position.x = m_hero_position.x - offsetX;
 	m_camera_position.z = m_hero_position.z - offsetZ;
-	m_camera_position.y = m_hero_position.y + verticaldist +25;
+	m_camera_position.y = m_hero_position.y + verticaldist+10;
 	this->m_light.SetTarget(m_hero_position);
 	this->m_light.SetPosition(glm::vec3(m_hero_position.x, 5.f, m_hero_position.z));
-	std::cout << "pos x: " << m_hero_position.x << "pos z: " << m_hero_position.z << std::endl;
+	//std::cout << "pos x: " << m_hero_position.x << "pos z: " << m_hero_position.z << std::endl;
 	m_view_matrix = glm::lookAt(m_camera_position, m_hero_position + glm::vec3(0.f, 1.6f, 0.f), m_camera_up_vector);
 	
 }
@@ -557,13 +576,49 @@ void Renderer::UpdateCamera()
 void::Renderer::UpdateHero(float dt) {
 	
 	//if (m_border_map[]
+		int i = glm::floor(2 * (m_hero_position.x + 9.0));
+		int j = glm::floor(2 * (m_hero_position.z + 28.0));
+		//std::cout << "i" << i << "j" << j << std::endl;;
 		glm::vec3 pos_change = glm::vec3((m_hero_movement.x * 1.f * dt) * sin(m_hero_rotation), 0.f, (m_hero_movement.x * 1.f * dt) * cos(m_hero_rotation));
-		rot_change = m_hero_movement.z * 2.5 * dt;
-		m_hero_position = m_hero_position + pos_change;
-		m_hero_rotation = m_hero_rotation + rot_change;
-		glm::vec3 pos_change_model = glm::vec3((m_hero_movement.x * 1.f * dt) * sin(rot_change), 0.f, (m_hero_movement.x * 1.f * dt) * cos(rot_change));
-		this->m_nodes[0]->app_model_matrix *= glm::translate(glm::mat4(1.f), pos_change_model) * glm::rotate(glm::mat4(1.f), rot_change, glm::vec3(0.f, 1.f, 0.f));
-		std::cout << "pos x: " << hero_pos.x<< "pos z: " << hero_pos.z << std::endl;
+		if (m_border_map[i][j].to_string() == "0000") {
+			rot_change = m_hero_movement.z * 2.5 * dt;
+			m_hero_position = m_hero_position + pos_change;
+			m_hero_rotation = m_hero_rotation + rot_change;
+			glm::vec3 pos_change_model = glm::vec3((m_hero_movement.x * 1.f * dt) * sin(rot_change), 0.f, (m_hero_movement.x * 1.f * dt) * cos(rot_change));
+			this->m_nodes[0]->app_model_matrix *= glm::translate(glm::mat4(1.f), pos_change_model) * glm::rotate(glm::mat4(1.f), rot_change, glm::vec3(0.f, 1.f, 0.f));
+			std::cout << "pos x: " << pos_change.x<< "pos z: " << pos_change.z << std::endl;
+			//std::cout << m_border_map[i][j] << std::endl;
+		}
+		else if(m_border_map[i][j].to_string() == "1000"){
+			//if (pos_change.x < 0 && (pos_change.z < 0 || pos_change.z >0)) {
+			//	m_hero_position.x = m_hero_position.x + 0.05;
+			//}
+			//else if(pos_change.x > 0 && (pos_change.z < 0 || pos_change.z >0)){
+			//	m_hero_position.x = m_hero_position.x - 0.05;
+			//}
+			//if (pos_change.z < 0 && (pos_change.x < 0 || pos_change.x >0)) {
+			//	m_hero_position.z = m_hero_position.z + 0.05;
+			//}
+			//else {
+			//	m_hero_position.z = m_hero_position.z - 0.05;
+			//}
+			
+			if (pos_change.x < 0 ) {
+				m_hero_position.x = m_hero_position.x + 0.05;
+			}
+			else if (pos_change.x > 0 ) {
+				m_hero_position.x = m_hero_position.x - 0.05;
+			}
+			if (pos_change.z < 0 ) {
+				m_hero_position.z = m_hero_position.z + 0.05;
+			}
+			else if (pos_change.z > 0) {
+				m_hero_position.z = m_hero_position.z - 0.05;
+			}
+			//m_hero_rotation = m_hero_rotation;
+			this->m_nodes[0]->app_model_matrix = glm::translate(glm::mat4(1.f), m_hero_position)* glm::rotate(glm::mat4(1.f), m_hero_rotation, glm::vec3(0.f, 1.f, 0.f));
+		}
+			std::cout << "x:" << i << " z:" << j << std::endl;
 }
 
 bool Renderer::ReloadShaders()
@@ -999,7 +1054,7 @@ void Renderer::CameraZoom(float amount)
 {
 	if (m_camera_distance >= 2 && m_camera_distance <= 4) {
 		m_camera_distance += amount / 4;
-		std::cout << m_camera_distance << std::endl;
+		//std::cout << m_camera_distance << std::endl;
 	}
 	else if (m_camera_distance == 1.875) {
 		m_camera_distance = 2;
@@ -1010,7 +1065,7 @@ void Renderer::CameraZoom(float amount)
 }
 
 void Renderer::HeroDoorCheck() {
-	std::cout << "z" << hero_pos.x << std::endl;
+	//std::cout << "z" << hero_pos.x << std::endl;
 	if ((hero_pos.x <= m_nodes[42]->app_model_matrix[3].x - 1 && hero_pos.x >= m_nodes[42]->app_model_matrix[3].x - 2 ||//7,5 8,5
 		hero_pos.x >= m_nodes[42]->app_model_matrix[3].x + 1 && hero_pos.x <= m_nodes[42]->app_model_matrix[3].x + 2)) {//[10,5 1.5		
 		if (!opened) {
@@ -1023,4 +1078,21 @@ void Renderer::HeroDoorCheck() {
 			canOpen = false;
 		}
 	}
+}
+
+
+bool isColliding(glm::vec3 position, float radius, std::vector<glm::vec3> wallPositions, float wallWidth, float wallHeight=3) {
+	// Get the boundaries of the hero's bounding box
+	glm::vec3 minBound = position - glm::vec3(radius, 0, radius);
+	glm::vec3 maxBound = position + glm::vec3(radius, wallHeight, radius);
+
+	// Check if the bounding box collides with any of the walls
+	for (glm::vec3 wallPos : wallPositions) {
+		if (minBound.x <= wallPos.x + wallWidth && maxBound.x >= wallPos.x &&
+			minBound.y <= wallPos.y + wallHeight && maxBound.y >= wallPos.y &&
+			minBound.z <= wallPos.z + wallWidth && maxBound.z >= wallPos.z) {
+			return true;
+		}
+	}
+	return false;
 }

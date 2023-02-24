@@ -1,45 +1,61 @@
-﻿  AssetManager.cpp
-  CollidableNode.cpp
-  GeometryNode.cpp
-  Renderer.cpp
-C:\Users\dimit\OneDrive\Desktop\OpenGl_DungeonGame\Source\Renderer.cpp(309,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\dimit\OneDrive\Desktop\OpenGl_DungeonGame\Source\Renderer.cpp(674,25): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+﻿  Renderer.cpp
+C:\Users\dimit\OneDrive\Desktop\DungeonVers\version7\OpenGl_DungeonGame\Source\Renderer.cpp(539,23): warning C4305: '=': truncation from 'double' to 'float'
+C:\Users\dimit\OneDrive\Desktop\DungeonVers\version7\OpenGl_DungeonGame\Source\Renderer.cpp(579,9): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\dimit\OneDrive\Desktop\DungeonVers\version7\OpenGl_DungeonGame\Source\Renderer.cpp(580,9): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\dimit\OneDrive\Desktop\DungeonVers\version7\OpenGl_DungeonGame\Source\Renderer.cpp(584,41): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\dimit\OneDrive\Desktop\DungeonVers\version7\OpenGl_DungeonGame\Source\Renderer.cpp(607,43): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
           with
           [
               T=float
           ]
-C:\Users\dimit\OneDrive\Desktop\OpenGl_DungeonGame\Source\Renderer.cpp(678,25): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+C:\Users\dimit\OneDrive\Desktop\DungeonVers\version7\OpenGl_DungeonGame\Source\Renderer.cpp(610,43): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
           with
           [
               T=float
           ]
-C:\Users\dimit\OneDrive\Desktop\OpenGl_DungeonGame\Source\Renderer.cpp(683,25): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+C:\Users\dimit\OneDrive\Desktop\DungeonVers\version7\OpenGl_DungeonGame\Source\Renderer.cpp(613,43): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
           with
           [
               T=float
           ]
-C:\Users\dimit\OneDrive\Desktop\OpenGl_DungeonGame\Source\Renderer.cpp(687,25): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+C:\Users\dimit\OneDrive\Desktop\DungeonVers\version7\OpenGl_DungeonGame\Source\Renderer.cpp(616,43): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
           with
           [
               T=float
           ]
-  ShaderProgram.cpp
-  TextureManager.cpp
-C:\Users\dimit\OneDrive\Desktop\OpenGl_DungeonGame\Source\TextureManager.cpp(59,9): warning C4101: 'internal_texture_format': unreferenced local variable
-  main.cpp
+C:\Users\dimit\OneDrive\Desktop\DungeonVers\version7\OpenGl_DungeonGame\Source\Renderer.cpp(1027,23): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\dimit\OneDrive\Desktop\DungeonVers\version7\OpenGl_DungeonGame\Source\Renderer.cpp(1033,23): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\dimit\OneDrive\Desktop\DungeonVers\version7\OpenGl_DungeonGame\Source\Renderer.cpp(1038,23): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\dimit\OneDrive\Desktop\DungeonVers\version7\OpenGl_DungeonGame\Source\Renderer.cpp(1043,23): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
   Generating code
-  0 of 1309 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+  3 of 1400 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+    7 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
-  OpenGl_DungeonGame.vcxproj -> C:\Users\dimit\OneDrive\Desktop\OpenGl_DungeonGame\x64\Release\OpenGl_DungeonGame.exe
-  copy "C:\Users\dimit\OneDrive\Desktop\OpenGl_DungeonGame\3rd party\bin\*.dll" "C:\Users\dimit\OneDrive\Desktop\OpenGl_DungeonGame\x64\Release\"
-  C:\Users\dimit\OneDrive\Desktop\OpenGl_DungeonGame\3rd party\bin\glew32.dll
-  C:\Users\dimit\OneDrive\Desktop\OpenGl_DungeonGame\3rd party\bin\libjpeg-9.dll
-  C:\Users\dimit\OneDrive\Desktop\OpenGl_DungeonGame\3rd party\bin\libpng16-16.dll
-  C:\Users\dimit\OneDrive\Desktop\OpenGl_DungeonGame\3rd party\bin\libtiff-5.dll
-  C:\Users\dimit\OneDrive\Desktop\OpenGl_DungeonGame\3rd party\bin\libwebp-4.dll
-  C:\Users\dimit\OneDrive\Desktop\OpenGl_DungeonGame\3rd party\bin\SDL2.dll
-  C:\Users\dimit\OneDrive\Desktop\OpenGl_DungeonGame\3rd party\bin\SDL2_image.dll
-  C:\Users\dimit\OneDrive\Desktop\OpenGl_DungeonGame\3rd party\bin\zlib1.dll
+  OpenGl_DungeonGame.vcxproj -> C:\Users\dimit\OneDrive\Desktop\DungeonVers\version7\OpenGl_DungeonGame\x64\Release\OpenGl_DungeonGame.exe
+  copy "C:\Users\dimit\OneDrive\Desktop\DungeonVers\version7\OpenGl_DungeonGame\3rd party\bin\*.dll" "C:\Users\dimit\OneDrive\Desktop\DungeonVers\version7\OpenGl_DungeonGame\x64\Release\"
+  C:\Users\dimit\OneDrive\Desktop\DungeonVers\version7\OpenGl_DungeonGame\3rd party\bin\glew32.dll
+  C:\Users\dimit\OneDrive\Desktop\DungeonVers\version7\OpenGl_DungeonGame\3rd party\bin\libjpeg-9.dll
+  C:\Users\dimit\OneDrive\Desktop\DungeonVers\version7\OpenGl_DungeonGame\3rd party\bin\libpng16-16.dll
+  C:\Users\dimit\OneDrive\Desktop\DungeonVers\version7\OpenGl_DungeonGame\3rd party\bin\libtiff-5.dll
+  C:\Users\dimit\OneDrive\Desktop\DungeonVers\version7\OpenGl_DungeonGame\3rd party\bin\libwebp-4.dll
+  C:\Users\dimit\OneDrive\Desktop\DungeonVers\version7\OpenGl_DungeonGame\3rd party\bin\SDL2.dll
+  C:\Users\dimit\OneDrive\Desktop\DungeonVers\version7\OpenGl_DungeonGame\3rd party\bin\SDL2_image.dll
+  C:\Users\dimit\OneDrive\Desktop\DungeonVers\version7\OpenGl_DungeonGame\3rd party\bin\zlib1.dll
           8 file(s) copied.

@@ -41,7 +41,7 @@ protected:
 
 	float m_continous_time;
 
-	std::bitset<4> m_border_map[200][200];
+	std::bitset<4> m_border_map[48][60];
 	float m_ttl = 2.f;
 	bool arrow_fired = false;
 	float time_fired = 2.f;

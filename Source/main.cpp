@@ -4,6 +4,11 @@
 #include "GLEW\glew.h"
 #include "Renderer.h"
 #include <thread>         // std::this_thread::sleep_for
+#include <Windows.h>
+#include <mmsystem.h>
+#include <string>
+#include <thread>
+#pragma comment(lib, "winmm.lib")
 
 using namespace std;
 
@@ -19,6 +24,13 @@ const int SCREEN_HEIGHT = 640;
 SDL_Event event;
 
 Renderer* renderer = nullptr;
+
+void playSoundAsync(const std::string& filename)
+{
+	std::string command = "open \"" + filename + "\" type mpegvideo alias mp3";
+	mciSendString(command.c_str(), NULL, 0, NULL);
+	mciSendString("play mp3 repeat", NULL, 0, NULL);
+}
 
 void clean_up()
 {
@@ -102,6 +114,9 @@ int main(int argc, char* argv[])
 
 	auto simulation_start = chrono::steady_clock::now();
 
+	std::string filename = "Assets/Dungeon/ost.wav";
+	std::thread t(playSoundAsync, filename);
+
 	// Wait for user exit
 	while (quit == false)
 	{
@@ -135,6 +150,12 @@ int main(int argc, char* argv[])
 				}
 				else if (event.key.keysym.sym == SDLK_r) {
 					renderer->HeroDoorCheck();
+				}
+				else if (event.key.keysym.sym == SDLK_RETURN && (renderer->GetHeroState() == false|| renderer->GetScore() == 2)) {
+					renderer->~Renderer();
+					renderer = new Renderer();
+					renderer->Init(SCREEN_WIDTH, SCREEN_HEIGHT);
+					
 				}
 			}
 			else if (event.type == SDL_KEYUP)
@@ -203,9 +224,19 @@ int main(int argc, char* argv[])
 			simulation_end - simulation_start).count(); // in seconds
 
 		simulation_start = chrono::steady_clock::now();
-
+		//std::cout << renderer->GetHeroState() << std::endl;
 		// Update
-		renderer->Update(dt);
+		if (renderer->GetHeroState() == true&&renderer->GetScore()!=2) {
+			renderer->Update(dt);
+			//std::cout << renderer->GetHeroState() << std::endl;
+		}
+		
+		if (renderer->GetHeroState() == false) {
+
+		}
+		if (renderer->GetScore() == 2) {
+		}
+
 
 		// Draw
 		renderer->Render();
@@ -213,7 +244,7 @@ int main(int argc, char* argv[])
 		//Update screen (swap buffer for double buffering)
 		SDL_GL_SwapWindow(window);
 	}
-
+	t.join();
 	//Clean up
 	clean_up();
 

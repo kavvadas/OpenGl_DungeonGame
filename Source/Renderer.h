@@ -6,7 +6,6 @@
 #include <vector>
 #include "ShaderProgram.h"
 #include "GeometryNode.h"
-#include "CollidableNode.h"
 #include "LightNode.h"
 #include <bitset>
 
@@ -28,6 +27,7 @@ protected:
 
 	float m_camera_distance = 3.f;
 	float angle_around_hero = -180.f;
+	float m_hero_speed = 1.f;
 
 	float pitch = 70.f;
 
@@ -37,6 +37,7 @@ protected:
 	glm::vec3 m_hero_direction;
 	float rot_change;
 	float m_hero_rotation;
+	bool m_hero_alive=true;
 
 
 	float m_continous_time;
@@ -56,6 +57,8 @@ protected:
 	float rotationAngle = 0.0f;
 	bool canClose = false;
 
+	int score;
+
 	// Protected Functions
 	bool InitShaders();
 	bool InitGeometricMeshes();
@@ -68,7 +71,6 @@ protected:
 	void RenderGeometry();
 	void RenderDeferredShading();
 	void RenderStaticGeometry();
-	void RenderCollidableGeometry();
 	void RenderShadowMaps();
 	void RenderPostProcess();
 
@@ -80,10 +82,13 @@ protected:
 	};
 
 	std::vector<GeometryNode*> m_nodes;
-	std::vector<CollidableNode*> m_collidables_nodes;
 
-	LightNode		m_light;
-	LightNode		m_spotlight;
+	LightNode        m_light;
+	LightNode        m_spotlight;
+	LightNode        m_room_light;
+	LightNode        m_dragon_light1;
+	LightNode        m_dragon_light2;
+
 	ShaderProgram	m_geometry_program;
 	ShaderProgram	m_deferred_program;
 	ShaderProgram	m_post_program;
@@ -125,6 +130,9 @@ public:
 	void CameraZoom(float amount);
 
 	void HeroDoorCheck();
+
+	bool GetHeroState();
+	int GetScore();
 
 };
 

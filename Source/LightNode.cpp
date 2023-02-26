@@ -1,6 +1,7 @@
 #include "LightNode.h"
 #include "glm\gtc\matrix_transform.hpp"
 #include "Tools.h"
+#include <iostream>
 
 // Spot Light
 LightNode::LightNode()
@@ -14,7 +15,7 @@ LightNode::LightNode()
 	SetConeSize(60, 60);
 
 	m_cast_shadow = false;
-	m_shadow_map_resolution = 1024;
+	m_shadow_map_resolution = 8192;
 	m_shadow_map_bias = 0.001;
 	m_shadow_map_texture = 0;
 	m_shadow_map_fbo = 0;

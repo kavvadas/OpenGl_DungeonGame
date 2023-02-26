@@ -5,7 +5,7 @@
 
 #include <unordered_map>
 #include "GLEW\glew.h"
-
+#include <iostream>
 class LightNode
 {
 	std::string m_name;

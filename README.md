@@ -18,4 +18,4 @@
 * Use "scroll wheel" to zoom the camera.
 * Use "R" to close and open doors.
 
-** Game finishes when you obtain the treasure hidden in the map. **
+**Game finishes when you obtain the treasure hidden in the map.**

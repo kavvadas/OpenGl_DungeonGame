@@ -1,11 +1,1 @@
-﻿  OpenGl_DungeonGame.vcxproj -> C:\Users\dimit\OneDrive\Desktop\DungeonVers\version7\OpenGl_DungeonGame\x64\Release\OpenGl_DungeonGame.exe
-  copy "C:\Users\dimit\OneDrive\Desktop\DungeonVers\version7\OpenGl_DungeonGame\3rd party\bin\*.dll" "C:\Users\dimit\OneDrive\Desktop\DungeonVers\version7\OpenGl_DungeonGame\x64\Release\"
-  C:\Users\dimit\OneDrive\Desktop\DungeonVers\version7\OpenGl_DungeonGame\3rd party\bin\glew32.dll
-  C:\Users\dimit\OneDrive\Desktop\DungeonVers\version7\OpenGl_DungeonGame\3rd party\bin\libjpeg-9.dll
-  C:\Users\dimit\OneDrive\Desktop\DungeonVers\version7\OpenGl_DungeonGame\3rd party\bin\libpng16-16.dll
-  C:\Users\dimit\OneDrive\Desktop\DungeonVers\version7\OpenGl_DungeonGame\3rd party\bin\libtiff-5.dll
-  C:\Users\dimit\OneDrive\Desktop\DungeonVers\version7\OpenGl_DungeonGame\3rd party\bin\libwebp-4.dll
-  C:\Users\dimit\OneDrive\Desktop\DungeonVers\version7\OpenGl_DungeonGame\3rd party\bin\SDL2.dll
-  C:\Users\dimit\OneDrive\Desktop\DungeonVers\version7\OpenGl_DungeonGame\3rd party\bin\SDL2_image.dll
-  C:\Users\dimit\OneDrive\Desktop\DungeonVers\version7\OpenGl_DungeonGame\3rd party\bin\zlib1.dll
-          8 file(s) copied.
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(439,5): error MSB8020: The build tools for v143 (Platform Toolset = 'v143') cannot be found. To build using the v143 build tools, please install v143 build tools.  Alternatively, you may upgrade to the current Visual Studio tools by selecting the Project menu or right-click the solution, and then selecting "Retarget solution".

@@ -35,7 +35,7 @@ Renderer::~Renderer()
 	glDeleteBuffers(1, &m_vbo_fbo_vertices);
 	float m_camera_distance = 3.f;
 	float angle_around_hero = -180.f;
-	float m_hero_speed = 1.f;
+	float m_hero_speed = 5.f;
 	float pitch = 70.f;
 	float m_ttl = 2.f;
 	bool arrow_fired = false;
@@ -696,33 +696,51 @@ void Renderer::UpdateDoor(float dt) {
 
 }
 void Renderer::UpdateCamera()
-{ 
-	//updatecamera
-	angle_around_hero += m_hero_movement.z*2;//rotate around player
-	float theta = angle_around_hero;
+{
+	// Adjust camera position based on hero rotation, with reduced speed
+	// Instead of directly adding to angle_around_hero, we'll match the rotation change
+
+	// Track the hero's rotation directly
+	// Remove the independent camera rotation component:
+	 angle_around_hero += m_hero_movement.z*0.02f; // Removed this line
+
+	// Use the hero's rotation angle directly 
+	float theta = m_hero_rotation;
+
+	// Calculate camera position based on distance and angles
 	float horizontaldist = m_camera_distance * cos(glm::radians(pitch));
 	float verticaldist = m_camera_distance * sin(glm::radians(pitch));
+
+	// Calculate offsets using hero's rotation angle
 	float offsetX = horizontaldist * sin(glm::radians(theta));
 	float offsetZ = horizontaldist * cos(glm::radians(theta));
+
+	// Position camera relative to hero
 	m_camera_position.x = m_hero_position.x - offsetX;
 	m_camera_position.z = m_hero_position.z - offsetZ;
 	m_camera_position.y = m_hero_position.y + verticaldist;
+
+	// Update spotlight to follow hero
 	this->m_spotlight.SetTarget(m_hero_position);
-	this->m_spotlight.SetPosition(glm::vec3(m_hero_position.x, 5.f, m_hero_position.z));
-	
-	m_view_matrix = glm::lookAt(m_camera_position, m_hero_position + glm::vec3(0.f, 1.6f, 0.f), m_camera_up_vector);
-	
+	this->m_spotlight.SetPosition(glm::vec3(m_hero_position.x, 1.f, m_hero_position.z));
+
+	// Create view matrix with camera looking at hero (with slight height offset)
+	m_view_matrix = glm::lookAt(
+		m_camera_position,
+		m_hero_position + glm::vec3(0.f, 1.f, 0.f),
+		m_camera_up_vector
+	);
 }
 
 void::Renderer::UpdateHero(float dt) {
 
 	int i = glm::floor(2 * (m_hero_position.x + 9.0));
 	int j = glm::floor(2 * (m_hero_position.z + 28.0));
-
+	float rot_change;
 	std::cout << i << j << std::endl;
 	glm::vec3 pos_change = glm::vec3((m_hero_movement.x * 1.f * dt) * sin(m_hero_rotation), 0.f, (m_hero_movement.x * m_hero_speed * dt) * cos(m_hero_rotation));
 	if (m_border_map[i][j].to_string() == "0000") {
-		rot_change = m_hero_movement.z * 1.5 * dt;
+		rot_change = m_hero_movement.z * 2.f * dt;
 		m_hero_position = m_hero_position + pos_change;
 		m_hero_rotation = m_hero_rotation + rot_change;
 		glm::vec3 pos_change_model = glm::vec3((m_hero_movement.x * 1.f * dt) * sin(rot_change), 0.f, (m_hero_movement.x * m_hero_speed * dt) * cos(rot_change));
@@ -769,7 +787,7 @@ void::Renderer::UpdateHero(float dt) {
 	}
 
 	this->m_nodes[0]->app_model_matrix = glm::translate(glm::mat4(1.f), m_hero_position) * glm::rotate(glm::mat4(1.f), m_hero_rotation, glm::vec3(0.f, 1.f, 0.f));
-	this->m_nodes[0]->app_model_matrix = glm::translate(glm::mat4(1.f), m_hero_position) * glm::rotate(glm::mat4(1.f), m_hero_rotation, glm::vec3(0.f, 1.f, 0.f));
+	//this->m_nodes[0]->app_model_matrix = glm::translate(glm::mat4(1.f), m_hero_position) * glm::rotate(glm::mat4(1.f), m_hero_rotation, glm::vec3(0.f, 1.f, 0.f));
 }
 bool Renderer::ReloadShaders()
 {
@@ -1259,8 +1277,8 @@ void Renderer::CameraMoveRight(bool enable)
 
 void Renderer::CameraLook(glm::vec2 lookDir)
 {
-	pitch -= lookDir.y * 0.1f;
-	angle_around_hero += lookDir.x * 0.1f;
+	pitch -= lookDir.y * 0.01f;
+	angle_around_hero += lookDir.x * 0.01f;
 
 }
 

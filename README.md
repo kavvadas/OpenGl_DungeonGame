@@ -17,5 +17,5 @@
 * Use "AWSD" to move arround the map.
 * Use "scroll wheel" to zoom the camera.
 * Use "R" to close and open doors.
-
+* Use "Enter" to restart the game.
 **Game finishes when you obtain the treasure hidden in the map.**
